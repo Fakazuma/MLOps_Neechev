@@ -6,7 +6,7 @@ authors = ["Fakazuma <me@example.com>"]
 readme = "README.md"
 
 packages = [
-    { include = "resnet" }
+    {include = "resnet" }
 ]
 
 [tool.poetry.dependencies]
@@ -19,12 +19,14 @@ torchvision = [
   {url = "https://download.pytorch.org/whl/cu118/torchvision-0.15.2%2Bcu118-cp39-cp39-win_amd64.whl"},
 ]
 click = "^8.1.7"
-wandb = "^0.15.11"
 timm = "^0.9.7"
 
 [tool.poetry.group.dev.dependencies]
 setuptools = "^68.2.2"
 pre-commit = "^3.4.0"
+
+[tool.isort]
+profile = "black"
 
 [build-system]
 requires = ["poetry-core"]

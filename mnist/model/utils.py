@@ -1,51 +1,35 @@
-"""ResNet PyTorch Utils
-
-Contains some functions that are useful towards the implementation
-and/or usage of all the available ResNet v1 variants trained both on
-ImageNet and CIFAR10.
-
-Some of this functions include:
-- Porting the weights from timm
-- Changing the memory format Contiguous / Channels Last
-- Normalization values of CIFAR10
-"""
-
 from __future__ import absolute_import
 
-from typing import Tuple
-
 from collections import OrderedDict
+from typing import Tuple
 
 import torch
 import torch.nn as nn
-
+from model.resnet import ResNet, resnet18, resnet34, resnet50, resnet101, resnet152
 from torch import Tensor
 from torch.hub import load_state_dict_from_url
-
-from model.resnet import ResNet
-from model.resnet import resnet18, resnet34, resnet50, resnet101, resnet152
 
 IMAGENET_VARIANTS = {
     "resnet18": {
         "url": "https://download.pytorch.org/models/resnet18-5c106cde.pth",
-        "model": resnet18
+        "model": resnet18,
     },
     "resnet34": {
         "url": "https://github.com/rwightman/pytorch-image-models/releases/download/v0.1-weights/resnet34-43635321.pth",
-        "model": resnet34
+        "model": resnet34,
     },
     "resnet50": {
         "url": "https://github.com/rwightman/pytorch-image-models/releases/download/v0.1-weights/resnet50_ram-a26f946b.pth",
-        "model": resnet50
+        "model": resnet50,
     },
     "resnet101": {
         "url": "https://download.pytorch.org/models/resnet101-63fe2227.pth",
-        "model": resnet101
+        "model": resnet101,
     },
     "resnet152": {
         "url": "https://download.pytorch.org/models/resnet152-394f9c45.pth",
-        "model": resnet152
-    }
+        "model": resnet152,
+    },
 }
 
 # https://gist.github.com/weiaicunzai/e623931921efefd4c331622c344d8151#gistcomment-2851662
@@ -68,7 +52,7 @@ def port_resnet_weights(variant: str) -> ResNet:
     assert variant in IMAGENET_VARIANTS.keys()
 
     try:
-        url = IMAGENET_VARIANTS[variant]['url']
+        url = IMAGENET_VARIANTS[variant]["url"]
         original_state_dict = load_state_dict_from_url(url)
     except Exception as e:
         raise Exception(f"state_dict could not be loaded from URL with exception: {e}")
@@ -77,18 +61,22 @@ def port_resnet_weights(variant: str) -> ResNet:
 
     # The known replacements between Ross Wightman's/PyTorch implementation and mine are defined
     for k, v in original_state_dict.items():
-        if k.startswith("layer"): k = k.replace("layer", "rl")
-        if k.__contains__("downsample"): k = k.replace("downsample", "subsample")
+        if k.startswith("layer"):
+            k = k.replace("layer", "rl")
+        if k.__contains__("downsample"):
+            k = k.replace("downsample", "subsample")
         custom_state_dict[k] = v
 
     del original_state_dict
 
     try:
-        model = IMAGENET_VARIANTS[variant]['model']
+        model = IMAGENET_VARIANTS[variant]["model"]
         model = model(pretrained=False)
         model.load_state_dict(custom_state_dict)
     except Exception as e:
-        raise Exception(f"state_dict could not be ported as it can't be loaded with exception: {e}")
+        raise Exception(
+            f"state_dict could not be ported as it can't be loaded with exception: {e}"
+        )
 
     return model
 
@@ -115,20 +103,26 @@ def convert_model_to_contiguous(model: nn.Module) -> nn.Module:
     return model
 
 
-def warmup_model(model: nn.Module, input_size: Tuple[int, int, int], batch_size: int,
-                 channels_last: bool = False) -> None:
+def warmup_model(
+    model: nn.Module,
+    input_size: Tuple[int, int, int],
+    batch_size: int,
+    channels_last: bool = False,
+) -> None:
     """Warms up the model before running evaluating the inference time."""
     assert batch_size > 0
 
     device = select_device()
 
     model = model.to(device)
-    if channels_last: convert_model_to_channels_last(model=model)
+    if channels_last:
+        convert_model_to_channels_last(model=model)
     model.eval()
 
     inputs = torch.randn((batch_size,) + input_size)
     inputs = inputs.to(device)
-    if channels_last: convert_inputs_to_channels_last(model=model)
+    if channels_last:
+        convert_inputs_to_channels_last(model=model)
 
     with torch.no_grad():
         _ = model(inputs)
@@ -141,7 +135,14 @@ def count_trainable_parameters(model: nn.Module) -> int:
 
 def count_layers(model: nn.Module) -> int:
     """Counts the total number of layers of a net."""
-    return len(list(filter(lambda param: param.requires_grad and len(param.data.size()) > 1, model.parameters())))
+    return len(
+        list(
+            filter(
+                lambda param: param.requires_grad and len(param.data.size()) > 1,
+                model.parameters(),
+            )
+        )
+    )
 
 
 def select_device() -> str:

@@ -13,7 +13,16 @@ import torch.nn.init as init
 from torch import Tensor
 from torch.hub import load_state_dict_from_url
 
-__all__ = ["BasicBlock", "BottleneckBlock", "ResNet"]
+__all__ = [
+    "BasicBlock",
+    "BottleneckBlock",
+    "ResNet",
+    "resnet18",
+    "resnet34",
+    "resnet50",
+    "resnet101",
+    "resnet152",
+]
 
 
 class IdentityMappingZero(nn.Module):
