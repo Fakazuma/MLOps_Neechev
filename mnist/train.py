@@ -185,6 +185,12 @@ def train_mnist(arch: str, zero_padding: bool) -> None:
             #     'test_error': test_error, 'test_time': test_time
             # }, step=epoch)
 
+        if not os.path.exists("./weights"):
+            os.makedirs("./weights")
+
+        if not os.path.exists("./logs"):
+            os.makedirs("./logs")
+
         if best_prec1 is None:
             best_prec1 = test_acc
         if best_prec1 <= test_acc:
