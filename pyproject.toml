@@ -20,6 +20,8 @@ numpy = "^1.25"
 #]
 click = "^8.1.7"
 timm = "^0.9.7"
+torch = "^2.1.0"
+torchvision = "^0.16.0"
 
 [tool.poetry.group.dev.dependencies]
 setuptools = "^68.2.2"
