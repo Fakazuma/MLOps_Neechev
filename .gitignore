@@ -2,3 +2,6 @@
 *.pth
 *.json
 **/dataset
+**/data
+**/weights
+**/logs

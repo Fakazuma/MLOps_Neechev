@@ -5,9 +5,10 @@ from typing import Tuple
 
 import torch
 import torch.nn as nn
-from model.resnet import ResNet, resnet18, resnet34, resnet50, resnet101, resnet152
 from torch import Tensor
 from torch.hub import load_state_dict_from_url
+
+from .resnet import ResNet, resnet18, resnet34, resnet50, resnet101, resnet152
 
 IMAGENET_VARIANTS = {
     "resnet18": {

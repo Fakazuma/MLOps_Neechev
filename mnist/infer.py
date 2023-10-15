@@ -4,13 +4,14 @@ from time import time
 
 import torch
 import torch.nn as nn
-from model.resnet import resnet20, resnet32, resnet44, resnet56, resnet110
-from model.utils import MEAN_NORMALIZATION, STD_NORMALIZATION, select_device
 from timm.utils.metrics import AverageMeter, accuracy
 from torch.utils.data import DataLoader, random_split
 from torchvision import transforms as T
 from torchvision.datasets import MNIST
 from torchvision.transforms import v2
+
+from .model.resnet import resnet20, resnet32, resnet44, resnet56, resnet110
+from .model.utils import MEAN_NORMALIZATION, STD_NORMALIZATION, select_device
 
 MODELS = {
     "resnet20": {
@@ -59,7 +60,7 @@ def infer_mnist(arch: str, zero_padding: bool, weights: str) -> None:
     BATCH_SIZE = 64
 
     test_dataset = MNIST(
-        root="dataset", train=False, download=True, transform=test_transform
+        root="data", train=False, download=True, transform=test_transform
     )
     test_dataloader = DataLoader(
         test_dataset, batch_size=BATCH_SIZE, shuffle=False, pin_memory=True
