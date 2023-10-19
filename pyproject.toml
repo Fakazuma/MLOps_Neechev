@@ -18,6 +18,7 @@ torch = "2.0.0"
 torchvision = "0.15.1"
 fire = "^0.5.0"
 dvc = "^3.27.0"
+dvc-gdrive = "^2.20.0"
 
 [tool.poetry.group.dev.dependencies]
 setuptools = "^68.2.2"
