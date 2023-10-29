@@ -1,4 +1,19 @@
+hydra/job_logging: disabled
+hydra/hydra_logging: disabled
+
 defaults:
     - _self_
 
-model: "resnet18"
+model: microsoft/resnet-18
+
+optimizer:
+    lr: 0.2
+
+data:
+    data_dir: "./data"
+    val_part: 0.2
+    batch_size: 16
+    dataloader_num_workers: 2
+
+trainer:
+    log_dir: "./log"
