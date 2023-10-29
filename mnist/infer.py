@@ -5,13 +5,13 @@ from time import time
 import torch
 import torch.nn as nn
 from timm.utils.metrics import AverageMeter, accuracy
-from torch.utils.data import DataLoader, random_split
+from torch.utils.data import DataLoader
 from torchvision import transforms as T
 from torchvision.datasets import MNIST
 from torchvision.transforms import v2
 
 from .model.resnet import resnet20, resnet32, resnet44, resnet56, resnet110
-from .model.utils import MEAN_NORMALIZATION, STD_NORMALIZATION, select_device
+from .model.utils import select_device
 
 MODELS = {
     "resnet20": {
@@ -53,7 +53,7 @@ def infer_mnist(arch: str, zero_padding: bool, weights: str) -> None:
         [
             T.ToTensor(),
             v2.Lambda(lambda x: x.repeat(3, 1, 1)),
-            T.Normalize(mean=MEAN_NORMALIZATION, std=STD_NORMALIZATION),
+            T.Normalize(mean=0, std=1),
         ]
     )
 

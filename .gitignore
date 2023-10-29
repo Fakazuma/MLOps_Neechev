@@ -5,3 +5,6 @@
 **/data
 **/weights
 **/logs
+**/log
+
+!mnist/data
