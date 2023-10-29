@@ -7,13 +7,18 @@ defaults:
 model: microsoft/resnet-18
 
 optimizer:
-    lr: 0.2
+    lr: 0.01
 
 data:
     data_dir: "./data"
     val_part: 0.2
-    batch_size: 16
-    dataloader_num_workers: 2
+    batch_size: 64
+    dataloader_num_workers: 8
+
 
 trainer:
-    log_dir: "./log"
+    root_log_dir: "."
+    max_epochs: 1
+
+test:
+    weights_path: 'lightning_logs/version_13/checkpoints/epoch=1-step=750.ckpt'

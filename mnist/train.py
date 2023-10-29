@@ -1,10 +1,11 @@
 from __future__ import absolute_import
 
 import hydra
-from data.my_data_module import MyDataModule
 from lightning import Trainer
-from model.my_model import MyResnet
 from omegaconf import DictConfig
+
+from data.my_data_module import MyDataModule
+from model.my_model import MyResnet
 
 
 @hydra.main(config_path="config", config_name="config", version_base="1.3")
@@ -22,9 +23,8 @@ def train(cfg: DictConfig):
     )
 
     trainer = Trainer(
-        default_root_dir=cfg.trainer.log_dir,
-        max_epochs=3,
-        accumulate_grad_batches=1,
+        default_root_dir=cfg.trainer.root_log_dir,
+        max_epochs=cfg.trainer.max_epochs,
     )
 
     trainer.fit(model, data_module)

@@ -11,10 +11,10 @@ from torchvision.transforms import ToTensor
 class MyDataModule(pl.LightningDataModule):
     def __init__(
         self,
-        data_dir: str,
-        val_part: float,
-        batch_size: int,
-        dataloader_num_workers: int,
+        data_dir: str = './data',
+        val_part: float = 0.2,
+        batch_size: int = 16,
+        dataloader_num_workers: int = 1,
     ):
         super().__init__()
         self.save_hyperparameters()
