@@ -1,8 +1,8 @@
-import os
 from typing import Optional
 
 import lightning.pytorch as pl
 import torch
+from dvc.api import DVCFileSystem
 from torch.utils.data.dataset import random_split
 from torchvision.datasets import MNIST
 from torchvision.transforms import ToTensor
@@ -11,7 +11,7 @@ from torchvision.transforms import ToTensor
 class MyDataModule(pl.LightningDataModule):
     def __init__(
         self,
-        data_dir: str = './data',
+        data_dir: str = "./data",
         val_part: float = 0.2,
         batch_size: int = 16,
         dataloader_num_workers: int = 1,
@@ -22,10 +22,12 @@ class MyDataModule(pl.LightningDataModule):
         self.val_part = val_part
         self.dataloader_num_workers = dataloader_num_workers
         self.batch_size = batch_size
+        self.fs = DVCFileSystem()
 
     def prepare_data(self):
-        MNIST(root=self.data_dir, train=True, download=True)  # train + val
-        MNIST(root=self.data_dir, train=False, download=True)  # test
+        # MNIST(root=self.data_dir, train=True, download=True)  # train + val
+        # MNIST(root=self.data_dir, train=False, download=True)  # test
+        self.fs.get(self.data_dir, self.data_dir, recursive=True)
 
     def setup(self, stage: Optional[str] = None):
         self.mnist_test = MNIST(self.data_dir, train=False, transform=ToTensor())
@@ -59,3 +61,7 @@ class MyDataModule(pl.LightningDataModule):
             shuffle=False,
             num_workers=self.dataloader_num_workers,
         )
+
+
+if __name__ == "__main__":
+    fs = DVCFileSystem().get("../../data", "../../data", recursive=True)

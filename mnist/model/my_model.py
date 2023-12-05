@@ -6,7 +6,11 @@ import torch
 import transformers
 from pytorch_lightning.utilities import grads
 from torch import nn, optim
-from torchmetrics.classification import MulticlassF1Score, MulticlassAUROC, MulticlassAccuracy
+from torchmetrics.classification import (
+    MulticlassAccuracy,
+    MulticlassAUROC,
+    MulticlassF1Score,
+)
 
 
 class MyResnet(pl.LightningModule):
@@ -52,18 +56,18 @@ class MyResnet(pl.LightningModule):
     def test_step(self, batch: Tuple[torch.Tensor, ...]) -> None:
         x, y = batch
         output = self(x)
-        self.test_preds_on_batch['preds'].append(output)
-        self.test_preds_on_batch['true'].append(y)
+        self.test_preds_on_batch["preds"].append(output)
+        self.test_preds_on_batch["true"].append(y)
 
     def on_test_epoch_end(self) -> None:
-        preds = torch.cat(self.test_preds_on_batch['preds'], dim=0)
-        true = torch.cat(self.test_preds_on_batch['true'], dim=0)
+        preds = torch.cat(self.test_preds_on_batch["preds"], dim=0)
+        true = torch.cat(self.test_preds_on_batch["true"], dim=0)
         accuracy = MulticlassAccuracy(num_classes=10).to(self.device)
         f1 = MulticlassF1Score(num_classes=10).to(self.device)
         auc = MulticlassAUROC(num_classes=10).to(self.device)
-        self.log('Accuracy', accuracy(preds, true))
-        self.log('F1-Score', f1(preds, true))
-        self.log('ROC-AUC', auc(preds, true))
+        self.log("Accuracy", accuracy(preds, true))
+        self.log("F1-Score", f1(preds, true))
+        self.log("ROC-AUC", auc(preds, true))
 
     def configure_optimizers(self):
         optimizer = optim.AdamW(
@@ -73,5 +77,8 @@ class MyResnet(pl.LightningModule):
         return optimizer
 
     def on_before_optimizer_step(self, optimizer):
-        self.log_dict(grads.grad_norm(self, norm_type=2))
+        self.log(
+            "grad_2.0_norm_total",
+            grads.grad_norm(self, norm_type=2)["grad_2.0_norm_total"],
+        )
         super().on_before_optimizer_step(optimizer)

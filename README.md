@@ -10,11 +10,20 @@ export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
 poetry install
 ```
 
-### Запуска обучения:
+### Заполнить конфиг (mlflow server):
+
+`mnist/configs/config.yaml`
+
+### Запуск обучения:
 
 ```shell
-python commands.py train
+python mnist/train.py
+
 ```
+
+### Заполнить конфиг (checkpoint path):
+
+`mnist/configs/config.yaml`
 
 ### Инференс:
 

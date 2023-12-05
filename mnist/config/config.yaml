@@ -4,6 +4,8 @@ hydra/hydra_logging: disabled
 defaults:
     - _self_
 
+experiment_name: "Experiment"
+
 model: microsoft/resnet-18
 
 optimizer:
@@ -15,10 +17,15 @@ data:
     batch_size: 64
     dataloader_num_workers: 8
 
-
 trainer:
     root_log_dir: "."
-    max_epochs: 1
+    max_epochs: 3
 
 test:
-    weights_path: 'lightning_logs/version_13/checkpoints/epoch=1-step=750.ckpt'
+    weights_path: "checkpoints/mnist-checkpoint.ckpt"
+
+checkpoint:
+    savedir: "./checkpoints"
+
+logger:
+    uri: "http://127.0.0.1:8085"

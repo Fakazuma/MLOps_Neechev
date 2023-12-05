@@ -6,7 +6,9 @@
 **/weights
 **/logs
 **/log
-/outputs
-
+outputs
+lightning_logs
+mlruns
+checkpoints
 
 !mnist/data
