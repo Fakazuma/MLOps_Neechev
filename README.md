@@ -28,5 +28,5 @@ python mnist/train.py
 ### Инференс:
 
 ```shell
-python commands.py infer
+python mnist/infer.py
 ```
