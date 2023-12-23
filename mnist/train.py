@@ -2,12 +2,13 @@ from __future__ import absolute_import
 
 import git
 import hydra
-from data.my_data_module import MyDataModule
 from lightning import Trainer
 from lightning.pytorch.callbacks import ModelCheckpoint
 from lightning.pytorch.loggers import MLFlowLogger
-from model.my_model import MyResnet
 from omegaconf import DictConfig
+
+from model.my_model import MyResnet
+from data.my_data_module import MyDataModule
 
 
 @hydra.main(config_path="config", config_name="config", version_base="1.3")

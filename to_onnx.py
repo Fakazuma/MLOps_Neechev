@@ -5,15 +5,16 @@ from omegaconf import DictConfig
 import lightning.pytorch as pl
 import torch
 
-from my_model import MyResnet
+from mnist.model.my_model import MyResnet
 
 
-@hydra.main(config_path="../config", config_name="config", version_base="1.3")
+@hydra.main(config_path="mnist/config", config_name="config", version_base="1.3")
 def convert_to_onnx(cfg: DictConfig):
     model: pl.LightningModule = MyResnet.load_from_checkpoint(cfg.to_onnx.weights_path)
     input_sample = torch.randn(1, 1, 28, 28)
     model.to_onnx(
-        file_path='my_resnet.onnx',
+        opset_version=10,
+        file_path='./model.onnx',
         input_sample=input_sample,
         export_params=True,
         do_constant_folding=True,

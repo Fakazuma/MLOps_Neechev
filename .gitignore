@@ -10,5 +10,9 @@ outputs
 lightning_logs
 mlruns
 checkpoints
+**/.uuid
+**/*.plan
+**/*.pt
+**/*.onnx
 
 !mnist/data

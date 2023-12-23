@@ -1,0 +1,37 @@
+name: "onnx-resnet-18"
+platform: "onnxruntime_onnx"
+max_batch_size: 16
+
+
+input [
+    {
+        name: "IMAGES"
+        data_type: TYPE_FP32
+        dims: [ 1, 28, 28 ]
+    }
+]
+
+output [
+    {
+        name: "CLASS_PROBS"
+        data_type: TYPE_FP32
+        dims: [ 10 ]
+    }
+]
+
+instance_group [
+    {
+        count: 1
+        kind: KIND_GPU
+        gpus: [ 0 ]
+    }
+]
+
+optimization { execution_accelerators {
+  gpu_execution_accelerator : [{
+    name : "tensorrt"
+    parameters { key: "precision_mode" value: "FP16" }
+  }]
+}}
+
+dynamic_batching { }

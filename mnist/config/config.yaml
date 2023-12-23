@@ -27,5 +27,8 @@ test:
 checkpoint:
     savedir: "./checkpoints"
 
+to_onnx:
+    weights_path: "/home/kashin/HW/NeechevMlops/mnist/checkpoints/mnist-checkpoint.ckpt"
+
 logger:
     uri: "http://127.0.0.1:8085"
